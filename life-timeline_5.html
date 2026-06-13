@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Life Timeline — From Sports to Technology</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── TOKENS ─── */
+:root {
+  --bg:      #050c1a;
+  --bg2:     #081628;
+  --card:    rgba(6,14,30,0.85);
+  --teal:    #2dd4bf;
+  --orange:  #fb923c;
+  --blue:    #60a5fa;
+  --gold:    #fbbf24;
+  --text:    #eef4ff;
+  --text2:   #b0ccdf;
+  --text3:   #507090;
+  --border:  rgba(96,165,250,0.13);
+  --gm:      rgba(96,165,250,0.06);
+  --gn:      rgba(96,165,250,0.022);
+  --sans:    'Satoshi', sans-serif;
+  --mono:    'JetBrains Mono', monospace;
+}
+
+/* ─── RESET ─── */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);color:var(--text);
+  font-family:var(--sans);font-size:15px;line-height:1.7;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+a{text-decoration:none;color:inherit}
+
+/* ─── LOADER ─── */
+#loader{
+  position:fixed;inset:0;z-index:9999;
+  background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  transition:opacity .6s ease .3s,visibility .6s ease .3s;
+}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.terminal{
+  width:min(560px,90vw);
+  background:rgba(4,12,26,.98);
+  border:1px solid var(--blue);
+  box-shadow:0 0 60px rgba(96,165,250,.1);
+}
+.terminal-bar{
+  display:flex;align-items:center;gap:8px;padding:12px 16px;
+  background:rgba(96,165,250,.05);border-bottom:1px solid var(--border);
+}
+.tb-dot{width:10px;height:10px;border-radius:50%}
+.tb-dot:nth-child(1){background:#ff5f57}
+.tb-dot:nth-child(2){background:#febc2e}
+.tb-dot:nth-child(3){background:#28c840}
+.terminal-title{flex:1;text-align:center;font-family:var(--mono);font-size:11px;color:var(--text3);letter-spacing:2px}
+.terminal-body{padding:24px 24px 20px;min-height:200px}
+.t-line{font-family:var(--mono);font-size:13px;line-height:2.1;opacity:0;white-space:nowrap;animation:tFade .1s forwards}
+.t-cmt{color:var(--text3)}.t-kw{color:var(--blue)}.t-str{color:var(--teal)}.t-ok{color:var(--teal)}
+.t-cursor{display:inline-block;width:7px;height:14px;background:var(--blue);vertical-align:middle;animation:blink .8s step-end infinite;margin-left:2px}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes tFade{to{opacity:1}}
+.loader-bar-wrap{margin-top:10px;background:rgba(96,165,250,.08);height:3px;border-radius:2px;overflow:hidden}
+.loader-bar-fill{height:100%;background:var(--blue);width:0%;box-shadow:0 0 8px var(--blue);transition:width .3s ease;border-radius:2px}
+
+/* ─── FIXED BACKGROUND ─── */
+#blueprintBg{
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    linear-gradient(var(--gm) 1px,transparent 1px),
+    linear-gradient(90deg,var(--gm) 1px,transparent 1px),
+    linear-gradient(var(--gn) 1px,transparent 1px),
+    linear-gradient(90deg,var(--gn) 1px,transparent 1px),
+    var(--bg);
+  background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+}
+#blueprintBg::after{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(96,165,250,.07) 0%,transparent 70%);
+}
+#particleCanvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.4}
+
+/* ─── PROGRESS & NAV ─── */
+#readProgress{
+  position:fixed;top:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--blue),var(--orange));
+  z-index:500;width:0%;box-shadow:0 0 6px var(--blue);transition:width .05s linear;
+}
+/* ─── SIDE NAV — bigger frosted panel ─── */
+#sideNav{
+  position:fixed;right:0;top:50%;transform:translateY(-50%);
+  z-index:200;display:flex;flex-direction:column;
+  background:rgba(5,12,26,.82);
+  border-left:1px solid rgba(96,165,250,.14);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  padding:10px 0;
+}
+.snav-sep{width:100%;height:1px;background:rgba(96,165,250,.1);margin:4px 0}
+.snav-item{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 22px 13px 16px;cursor:pointer;
+  position:relative;transition:background .25s;
+}
+.snav-item:hover{background:rgba(96,165,250,.05)}
+/* left accent bar */
+.snav-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:3px;background:transparent;
+  transition:background .25s,box-shadow .25s;
+}
+.snav-item.active::before{background:var(--ic,var(--blue));box-shadow:2px 0 8px var(--ic,var(--blue))}
+.snav-pip{
+  width:8px;height:8px;border-radius:50%;
+  background:var(--text3);flex-shrink:0;
+  transition:background .25s,box-shadow .25s,transform .25s;
+}
+.snav-item:hover .snav-pip{background:var(--ic,var(--blue));transform:scale(1.3)}
+.snav-item.active .snav-pip{background:var(--ic,var(--blue));box-shadow:0 0 10px var(--ic,var(--blue));transform:scale(1.4)}
+.snav-label{
+  font-family:var(--sans);font-size:13px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--text3);white-space:nowrap;
+  transition:color .25s;
+}
+.snav-item:hover .snav-label{color:var(--text2)}
+.snav-item.active .snav-label{color:var(--ic,var(--blue))}
+
+/* ─── SCANLINE ─── */
+.scanline{
+  position:fixed;left:0;width:100%;height:2px;z-index:300;
+  background:linear-gradient(90deg,transparent,rgba(96,165,250,.35) 50%,transparent);
+  pointer-events:none;animation:scanMove 12s linear infinite;top:-4px;
+}
+@keyframes scanMove{0%{top:-4px;opacity:.6}90%{opacity:.6}100%{top:100vh;opacity:0}}
+
+/* ─── HERO ─── */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 40px;overflow:hidden;
+}
+
+/* Hero full-bleed background image */
+#hero::before{
+  content:'';position:absolute;inset:0;z-index:0;
+  background-image:url('https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=1800&q=80');
+  background-size:cover;background-position:center;
+  filter:brightness(0.35) saturate(0.8);
+}
+/* Blueprint grid overlay on hero */
+#hero::after{
+  content:'';position:absolute;inset:0;z-index:0;
+  background:
+    linear-gradient(rgba(96,165,250,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,165,250,.04) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(5,12,26,.1) 0%,rgba(5,12,26,.7) 100%);
+  background-size:60px 60px,60px 60px,100% 100%;
+}
+
+#hero > *{position:relative;z-index:1}
+
+.hero-svg{position:absolute;inset:0;pointer-events:none;width:100%;height:100%;z-index:1}
+
+.hero-tag{font-family:var(--mono);font-size:11px;color:var(--blue);letter-spacing:4px;text-transform:uppercase;margin-bottom:24px;opacity:0;animation:riseUp .7s .2s forwards}
+.hero-tag::before{content:'// ';color:var(--text3)}
+.hero-h1{
+  font-family:var(--sans);font-size:clamp(52px,8.5vw,100px);font-weight:900;line-height:.92;letter-spacing:-2px;
+  opacity:0;animation:riseUp .7s .5s forwards;
+}
+.hero-h1 .w-main{color:var(--text);display:block}
+.hero-h1 .w-blue{color:transparent;-webkit-text-stroke:2px var(--blue);display:block;font-size:clamp(38px,6vw,72px);letter-spacing:12px;text-shadow:0 0 80px rgba(96,165,250,.2)}
+.hero-from-to{margin-top:28px;font-family:var(--sans);font-size:clamp(13px,1.8vw,18px);font-weight:500;color:var(--text2);letter-spacing:5px;text-transform:uppercase;opacity:0;animation:riseUp .7s .8s forwards}
+.hero-from-to .accent-teal{color:var(--teal);font-weight:700}
+.hero-from-to .accent-orange{color:var(--orange);font-weight:700}
+.hero-tagline{margin-top:14px;font-family:var(--mono);font-size:14px;color:var(--teal);letter-spacing:2px;opacity:0;animation:riseUp .7s 1s forwards}
+.hero-sep{margin:44px auto;width:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:expandW .8s 1.3s forwards}
+@keyframes expandW{to{width:280px}}
+.hero-pills{display:flex;gap:48px;opacity:0;animation:riseUp .7s 1.5s forwards}
+.hero-pill{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:3px}
+.pill-led{width:8px;height:8px;border-radius:50%;animation:ledPulse 2s infinite}
+.pill-led.teal{background:var(--teal);box-shadow:0 0 8px var(--teal)}
+.pill-led.orange{background:var(--orange);box-shadow:0 0 8px var(--orange);animation-delay:.6s}
+.pill-led.blue{background:var(--blue);box-shadow:0 0 8px var(--blue);animation-delay:1.2s}
+@keyframes ledPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.scroll-cue{position:absolute;bottom:36px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeIn 1s 2.1s forwards}
+.scroll-cue span{font-family:var(--sans);font-weight:600;font-size:9px;color:var(--text3);letter-spacing:4px;text-transform:uppercase}
+.scroll-chevron{width:16px;height:16px;border-right:1.5px solid var(--blue);border-bottom:1.5px solid var(--blue);transform:rotate(45deg);animation:chevBounce 2s ease-in-out infinite}
+@keyframes chevBounce{0%,100%{transform:rotate(45deg) translate(0,0)}50%{transform:rotate(45deg) translate(3px,3px)}}
+.hc{position:absolute;width:48px;height:48px;border-color:rgba(96,165,250,.25);border-style:solid}
+.hc-tl{top:36px;left:36px;border-width:1.5px 0 0 1.5px}
+.hc-tr{top:36px;right:36px;border-width:1.5px 1.5px 0 0}
+.hc-bl{bottom:36px;left:36px;border-width:0 0 1.5px 1.5px}
+.hc-br{bottom:36px;right:36px;border-width:0 1.5px 1.5px 0}
+.bp-circle{position:absolute;border-radius:50%;border:1px dashed rgba(96,165,250,.12);pointer-events:none}
+.bpc1{width:200px;height:200px;top:8%;left:4%;animation:rotateCW 40s linear infinite}
+.bpc2{width:150px;height:150px;bottom:10%;right:5%;animation:rotateCCW 30s linear infinite}
+@keyframes rotateCW{to{transform:rotate(360deg)}}
+@keyframes rotateCCW{to{transform:rotate(-360deg)}}
+
+/* ─── SECTION DIVIDER ─── */
+.s-div{position:relative;z-index:1;width:100%;height:1px;background:linear-gradient(90deg,transparent,var(--border) 20%,var(--border) 80%,transparent)}
+.s-div::before{content:'◆';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--bg);color:var(--blue);font-size:9px;padding:0 20px;letter-spacing:2px}
+
+/* ─── SECTION BANNER (large photo strip) ─── */
+.sec-banner{
+  position:relative;z-index:1;
+  width:100%;height:440px;overflow:hidden;
+}
+.sec-banner-img{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  transition:transform 8s ease;
+}
+.sec-banner:hover .sec-banner-img{transform:scale(1.04)}
+/* Dark gradient overlay on banner */
+.sec-banner-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(
+    to bottom,
+    rgba(5,12,26,.25) 0%,
+    rgba(5,12,26,.50) 50%,
+    rgba(5,12,26,.95) 100%
+  );
+  z-index:1;
+}
+/* Blueprint grid over banner */
+.sec-banner-grid{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:
+    linear-gradient(rgba(96,165,250,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(96,165,250,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+}
+.sec-banner-content{
+  position:absolute;bottom:0;left:0;right:0;z-index:3;
+  max-width:1360px;margin:0 auto;
+  padding:0 64px 48px;
+}
+.sec-eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:12px}
+.sec-h2{font-family:var(--sans);font-size:clamp(36px,5vw,60px);font-weight:900;letter-spacing:-1.5px;color:var(--text);line-height:1}
+.sec-h2.future-h2{font-size:clamp(40px,5.5vw,68px)}
+.sec-sub{margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--text3)}
+.past-eye{color:var(--teal)}
+.present-eye{color:var(--orange)}
+.future-eye{color:var(--blue)}
+
+/* ─── SECTION WRAPPER ─── */
+.sec{position:relative;z-index:1;max-width:1360px;margin:0 auto;padding:64px 64px 100px}
+
+/* ─── CARD GRID ─── */
+.grid{display:grid;gap:24px;overflow:visible}
+.grid-auto{grid-template-columns:repeat(auto-fill,minmax(300px,1fr))}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-full{grid-template-columns:1fr}
+.grid-future{grid-template-columns:1fr;gap:28px}
+
+/* ─── PHOTO CARD ─── */
+.card{
+  position:relative;z-index:1;
+  background:var(--card);
+  border:1px solid var(--border);
+  overflow:hidden;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  transition:
+    transform .45s cubic-bezier(.34,1.56,.64,1),
+    box-shadow .4s ease,
+    background .4s ease,
+    border-color .3s ease,
+    z-index 0s .45s;
+  opacity:0;transform:translateY(24px);
+  cursor:default;
+}
+.card.in{opacity:1;transform:translateY(0)}
+
+/* Card corner brackets on hover */
+.card::before,.card::after{content:'';position:absolute;width:18px;height:18px;opacity:0;transition:opacity .3s;border-style:solid;z-index:10}
+.card::before{top:-1px;left:-1px;border-width:2px 0 0 2px}
+.card::after{bottom:-1px;right:-1px;border-width:0 2px 2px 0}
+.card:hover::before,.card:hover::after{opacity:1}
+.card:hover{
+  transform:scale(1.06) translateY(-4px);
+  z-index:30;
+  transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .4s ease,background .4s ease,border-color .3s ease,z-index 0s 0s;
+}
+.card-teal::before,.card-teal::after{border-color:var(--teal)}
+.card-teal:hover{border-color:rgba(45,212,191,.35);box-shadow:0 28px 70px rgba(45,212,191,.14)}
+.card-orange::before,.card-orange::after{border-color:var(--orange)}
+.card-orange:hover{border-color:rgba(251,146,60,.35);box-shadow:0 28px 70px rgba(251,146,60,.14)}
+.card-blue::before,.card-blue::after{border-color:var(--blue)}
+.card-blue:hover{border-color:rgba(96,165,250,.35);box-shadow:0 28px 70px rgba(96,165,250,.14)}
+
+/* ── CARD PHOTO ── */
+.card-photo{
+  width:100%;height:220px;
+  background-size:cover;background-position:center;
+  position:relative;flex-shrink:0;
+  transition:transform 6s ease;
+}
+.card:hover .card-photo{transform:scale(1.06)}
+/* Gradient over photo bottom for text readability */
+.card-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 40%,rgba(6,14,30,.8) 100%);
+}
+
+/* Future section: taller photos */
+.card-photo-lg{height:280px}
+
+/* ── CARD BODY ── */
+.card-body{padding:22px 24px 22px}
+
+.card-icon{font-size:28px;display:block;margin-bottom:10px;line-height:1}
+.card-t{
+  font-family:var(--sans);font-size:13px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;margin-bottom:10px;
+}
+.card-teal .card-t{color:var(--teal)}
+.card-orange .card-t{color:var(--orange)}
+.card-blue .card-t{color:var(--blue)}
+.card-p{font-family:var(--sans);font-size:14.5px;line-height:1.72;color:var(--text2);font-weight:400}
+
+/* Future cards: larger body text */
+.sec-future .card-p{font-size:16.5px;line-height:1.80;color:#c0d6ec}
+.sec-future .card-icon{font-size:34px}
+.sec-future .card-t{font-size:15px;letter-spacing:2px}
+
+/* Badge */
+.badge{display:inline-flex;align-items:center;gap:8px;border:1px solid;padding:6px 16px;margin-top:14px;font-family:var(--sans);font-size:11.5px;font-weight:700;letter-spacing:2.5px}
+.badge-blue{color:var(--blue);border-color:rgba(96,165,250,.30);background:rgba(96,165,250,.06)}
+.badge-blue::before{content:'◆';font-size:7px;color:var(--orange)}
+.badge-orange{color:var(--orange);border-color:rgba(251,146,60,.30);background:rgba(251,146,60,.06)}
+.badge-orange::before{content:'◆';font-size:7px;color:var(--blue)}
+
+/* ─── QUOTE BANNER ─── */
+.quote-wrap{margin-top:56px;padding:30px 38px;border-left:2px solid;opacity:0;transition:opacity .8s ease}
+.quote-wrap.in{opacity:1}
+.quote-teal{border-color:var(--teal);background:linear-gradient(90deg,rgba(45,212,191,.06),transparent)}
+.quote-orange{border-color:var(--orange);background:linear-gradient(90deg,rgba(251,146,60,.06),transparent)}
+.quote-blue{border-color:var(--blue);background:linear-gradient(90deg,rgba(96,165,250,.06),transparent)}
+.quote-inner{font-family:var(--sans);font-size:18px;font-style:italic;font-weight:400;color:var(--text);line-height:1.75}
+.quote-inner::before{content:'\201C'}.quote-inner::after{content:'\201D'}
+.quote-attr{margin-top:10px;font-family:var(--mono);font-size:10.5px;color:var(--text3);letter-spacing:2px}
+
+/* ─── JOURNEY SECTION ─── */
+#journey{
+  position:relative;z-index:1;
+  min-height:380px;overflow:hidden;
+}
+.journey-bg{
+  position:absolute;inset:0;
+  background-image:url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1800&q=80');
+  background-size:cover;background-position:center;
+  filter:brightness(.28) saturate(.7);
+}
+.journey-overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(var(--gm) 1px,transparent 1px),
+    linear-gradient(90deg,var(--gm) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(5,12,26,.2),rgba(5,12,26,.5));
+  background-size:60px 60px,60px 60px,100% 100%;
+}
+.journey-inner{position:relative;z-index:1;max-width:1360px;margin:0 auto;padding:80px 64px}
+.journey-title{text-align:center;font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:7px;color:var(--text3);text-transform:uppercase;margin-bottom:64px}
+.journey-title::before,.journey-title::after{content:'——— ';letter-spacing:0;font-family:var(--mono)}
+.journey-track{position:relative;display:flex;align-items:flex-start;justify-content:center;gap:0}
+.journey-step{display:flex;flex-direction:column;align-items:center;gap:14px;flex:1;min-width:100px;max-width:150px;opacity:0;transform:translateY(18px);transition:opacity .5s ease,transform .5s ease}
+.journey-step.in{opacity:1;transform:translateY(0)}
+.step-node{width:62px;height:62px;border:1px solid var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;background:rgba(9,22,48,.7);backdrop-filter:blur(8px);position:relative;transition:all .3s ease}
+.step-node::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px dashed rgba(96,165,250,.2);transition:all .3s ease}
+.journey-step:hover .step-node{box-shadow:0 0 28px rgba(96,165,250,.35);background:rgba(96,165,250,.12)}
+.journey-step:hover .step-node::before{border-color:rgba(96,165,250,.45);inset:-10px}
+.step-lbl{font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--text);text-align:center;text-transform:uppercase}
+.step-sub{font-family:var(--sans);font-size:11px;font-weight:400;color:var(--text3);text-align:center;line-height:1.6;margin-top:-8px}
+.journey-conn{flex:1;display:flex;align-items:center;padding-top:31px;min-width:16px}
+.conn-line{flex:1;height:1px;background:linear-gradient(90deg,rgba(96,165,250,.5),rgba(96,165,250,.18));position:relative}
+.conn-line::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-top:4px solid transparent;border-bottom:4px solid transparent;border-left:5px solid rgba(96,165,250,.5)}
+
+/* ─── FOOTER ─── */
+#footer{position:relative;z-index:1;max-width:1360px;margin:0 auto;padding:90px 64px;text-align:center}
+.footer-card{
+  display:inline-block;background:var(--card);border:1px solid var(--border);
+  padding:48px 72px;position:relative;max-width:560px;
+  opacity:0;transform:translateY(24px);transition:all .8s ease;backdrop-filter:blur(16px);
+}
+.footer-card.in{opacity:1;transform:translateY(0)}
+.footer-card::before,.footer-card::after{content:'';position:absolute;width:24px;height:24px;border-color:var(--blue);border-style:solid}
+.footer-card::before{top:-2px;left:-2px;border-width:2px 0 0 2px}
+.footer-card::after{bottom:-2px;right:-2px;border-width:0 2px 2px 0}
+.footer-qt{font-family:var(--sans);font-size:20px;line-height:1.8;color:var(--text);font-weight:400;font-style:italic}
+.footer-sub{margin-top:18px;font-family:var(--mono);font-size:11px;color:var(--teal);letter-spacing:3px}
+.footer-sub::before{content:'// ';color:var(--text3)}
+.footer-bar{margin-top:64px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid var(--border);padding-top:28px}
+.footer-logo{font-family:var(--sans);font-size:15px;font-weight:800;color:var(--blue);letter-spacing:1px}
+.footer-meta{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1px}
+.footer-status{font-family:var(--sans);font-size:10px;font-weight:700;color:var(--teal);letter-spacing:3px}
+.footer-status::before{content:'● ';animation:ledPulse 2s infinite}
+
+/* ─── LIGHTBOX ─── */
+#lightbox{
+  position:fixed;inset:0;z-index:8000;
+  background:rgba(3,8,20,.96);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;
+  opacity:0;visibility:hidden;
+  transition:opacity .35s ease,visibility .35s ease;
+}
+#lightbox.open{opacity:1;visibility:visible}
+
+/* TOP BAR */
+.lb-topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 28px;border-bottom:1px solid var(--border);flex-shrink:0;gap:20px;
+}
+/* MINI TIMELINE */
+.lb-timeline{display:flex;align-items:center;gap:14px;flex:1;overflow:hidden;min-width:0}
+.lb-tl-section{display:flex;flex-direction:column;gap:7px;align-items:center;flex-shrink:0}
+.lb-tl-sec-label{
+  font-family:var(--mono);font-size:9px;letter-spacing:3px;
+  text-transform:uppercase;font-weight:600;opacity:.55;transition:opacity .3s;
+}
+.lb-tl-sec-label.tl-active{opacity:1}
+.lb-tl-dots{display:flex;gap:6px;align-items:center}
+.lb-tl-dot{
+  width:9px;height:9px;border-radius:50%;border:1.5px solid;
+  background:transparent;transition:all .3s;cursor:pointer;flex-shrink:0;
+}
+.lb-tl-dot:hover{transform:scale(1.3)}
+.lb-tl-dot.active{transform:scale(1.5);background:currentColor;box-shadow:0 0 8px currentColor}
+.lb-tl-connector{flex:1;height:1px;background:var(--border);min-width:16px;max-width:60px}
+
+/* TOP RIGHT */
+.lb-top-right{display:flex;align-items:center;gap:16px;flex-shrink:0}
+.lb-counter{font-family:var(--mono);font-size:12px;color:var(--text3);letter-spacing:2px;white-space:nowrap}
+.lb-close{
+  width:36px;height:36px;border:1px solid var(--border);
+  background:rgba(255,255,255,.04);color:var(--text2);font-size:15px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.lb-close:hover{background:rgba(251,80,60,.15);border-color:#fb503c;color:#fb503c}
+
+/* MAIN CONTENT */
+.lb-main{flex:1;display:flex;align-items:stretch;overflow:hidden;min-height:0}
+
+/* CARD PANEL */
+.lb-card{
+  flex:1;display:grid;grid-template-columns:56% 44%;
+  overflow:hidden;min-height:0;
+  transition:transform .38s cubic-bezier(.4,0,.2,1),opacity .3s ease;
+}
+.lb-card.slide-out-l{transform:translateX(-50px);opacity:0;pointer-events:none}
+.lb-card.slide-out-r{transform:translateX(50px);opacity:0;pointer-events:none}
+.lb-card.slide-in-l{animation:slideInL .38s cubic-bezier(.4,0,.2,1) forwards}
+.lb-card.slide-in-r{animation:slideInR .38s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes slideInL{from{transform:translateX(-50px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes slideInR{from{transform:translateX(50px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+/* PHOTO PANEL */
+.lb-photo{
+  background-size:cover;background-position:center;
+  position:relative;transition:background-image .1s;
+}
+.lb-photo::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(to right,transparent 55%,rgba(3,8,20,.75) 100%);
+}
+
+/* BODY PANEL */
+.lb-body{
+  padding:44px 48px;display:flex;flex-direction:column;justify-content:center;
+  gap:18px;overflow-y:auto;background:rgba(6,14,32,.6);border-left:1px solid var(--border);
+}
+.lb-sec-tag{
+  font-family:var(--mono);font-size:10px;letter-spacing:4px;text-transform:uppercase;font-weight:600;
+  padding-bottom:16px;border-bottom:1px solid var(--border);
+}
+.lb-icon{font-size:54px;line-height:1;display:block}
+.lb-title{
+  font-family:var(--sans);font-size:clamp(24px,3vw,36px);
+  font-weight:900;letter-spacing:-.5px;color:var(--text);line-height:1.1;
+}
+.lb-text{font-family:var(--sans);font-size:clamp(15px,1.5vw,19px);line-height:1.82;color:var(--text2);font-weight:400}
+.lb-badge-el{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid;padding:7px 18px;
+  font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:2.5px;
+}
+
+/* ARROWS */
+.lb-arrow{
+  flex-shrink:0;width:68px;
+  background:rgba(6,14,30,.6);border:none;
+  color:var(--text3);font-size:22px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .25s;border-color:var(--border);
+}
+.lb-arrow:hover{background:rgba(96,165,250,.1);color:var(--text)}
+.lb-prev{border-right:1px solid var(--border)}
+.lb-next{border-left:1px solid var(--border)}
+.lb-arrow:disabled{opacity:.18;cursor:not-allowed}
+
+/* HINT */
+.lb-hint{
+  padding:11px 28px;text-align:center;font-family:var(--mono);
+  font-size:9px;letter-spacing:3px;color:var(--text3);
+  border-top:1px solid var(--border);flex-shrink:0;
+}
+
+/* Cards are clickable */
+.card{cursor:pointer}
+</style>
+@keyframes riseUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1024px){.grid-2{grid-template-columns:1fr}.sec{padding:56px 40px 80px}.sec-banner-content{padding:0 40px 40px}}
+@media(max-width:768px){
+  .sec{padding:48px 20px 60px}.journey-inner{padding:60px 20px}
+  #footer{padding:60px 20px}.sec-banner-content{padding:0 20px 32px}
+  #sideNav{display:none}.sec-banner{height:320px}.card-photo{height:180px}.card-photo-lg{height:200px}
+  .journey-conn{display:none}.journey-track{flex-wrap:wrap;gap:20px}.journey-step{max-width:130px}
+  .footer-bar{flex-direction:column;gap:12px;text-align:center}.footer-card{padding:36px 24px}
+  .bpc1,.bpc2{display:none}
+}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;transition-duration:.01ms !important}}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="terminal">
+    <div class="terminal-bar">
+      <div class="tb-dot"></div><div class="tb-dot"></div><div class="tb-dot"></div>
+      <div class="terminal-title">life-timeline — zsh</div>
+    </div>
+    <div class="terminal-body" id="termBody">
+      <div class="loader-bar-wrap"><div class="loader-bar-fill" id="loaderBar"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BG -->
+<div id="blueprintBg"></div>
+<canvas id="particleCanvas"></canvas>
+<div class="scanline"></div>
+<div id="readProgress"></div>
+
+<!-- SIDE NAV — bigger, always visible panel -->
+<nav id="sideNav">
+  <div class="snav-item" data-target="hero" style="--ic:var(--blue)">
+    <div class="snav-pip"></div>
+    <div class="snav-label">INIT</div>
+  </div>
+  <div class="snav-sep"></div>
+  <div class="snav-item" data-target="past" style="--ic:var(--teal)">
+    <div class="snav-pip"></div>
+    <div class="snav-label">PAST</div>
+  </div>
+  <div class="snav-item" data-target="present" style="--ic:var(--orange)">
+    <div class="snav-pip"></div>
+    <div class="snav-label">PRESENT</div>
+  </div>
+  <div class="snav-item" data-target="future" style="--ic:var(--blue)">
+    <div class="snav-pip"></div>
+    <div class="snav-label">FUTURE</div>
+  </div>
+  <div class="snav-sep"></div>
+  <div class="snav-item" data-target="journey" style="--ic:var(--gold)">
+    <div class="snav-pip"></div>
+    <div class="snav-label">JOURNEY</div>
+  </div>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section id="hero">
+  <svg class="hero-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <line x1="100" y1="50" x2="400" y2="50" stroke="rgba(96,165,250,.18)" stroke-width="1"/>
+    <line x1="100" y1="45" x2="100" y2="55" stroke="rgba(96,165,250,.18)" stroke-width="1"/>
+    <line x1="400" y1="45" x2="400" y2="55" stroke="rgba(96,165,250,.18)" stroke-width="1"/>
+    <text x="250" y="40" fill="rgba(96,165,250,.22)" font-family="JetBrains Mono" font-size="9" text-anchor="middle" letter-spacing="2">1440px</text>
+    <circle cx="720" cy="450" r="320" stroke="rgba(96,165,250,.06)" fill="none" stroke-width="1" stroke-dasharray="6,12"/>
+    <circle cx="720" cy="450" r="380" stroke="rgba(96,165,250,.035)" fill="none" stroke-width="1"/>
+    <line x1="710" y1="450" x2="730" y2="450" stroke="rgba(96,165,250,.16)" stroke-width="1"/>
+    <line x1="720" y1="440" x2="720" y2="460" stroke="rgba(96,165,250,.16)" stroke-width="1"/>
+    <circle cx="720" cy="450" r="5" stroke="rgba(96,165,250,.2)" fill="none" stroke-width="1"/>
+    <path d="M 60 200 L 200 200 L 200 350 L 300 350" stroke="rgba(96,165,250,.1)" fill="none" stroke-width="1" stroke-dasharray="4,8"/>
+    <circle cx="300" cy="350" r="3" fill="rgba(96,165,250,.22)"/>
+    <text x="60" y="860" fill="rgba(96,165,250,.15)" font-family="JetBrains Mono" font-size="9" letter-spacing="2">SCALE 1:1 · SHEET 01/01 · REV.A</text>
+    <text x="1380" y="860" fill="rgba(96,165,250,.15)" font-family="JetBrains Mono" font-size="9" letter-spacing="2" text-anchor="end">BugAI ARCHITECTURE · 2026</text>
+  </svg>
+  <div class="hc hc-tl"></div><div class="hc hc-tr"></div><div class="hc hc-bl"></div><div class="hc hc-br"></div>
+  <div class="bp-circle bpc1"></div><div class="bp-circle bpc2"></div>
+  <div class="hero-tag">life.timeline.init() → v1.0.0</div>
+  <h1 class="hero-h1"><span class="w-main">MY LIFE</span><span class="w-blue">TIMELINE</span></h1>
+  <p class="hero-from-to">FROM&nbsp;<span class="accent-teal">SPORTS</span>&nbsp;TO&nbsp;<span class="accent-orange">TECHNOLOGY</span></p>
+  <p class="hero-tagline">// Dream it. Work for it. Build it.</p>
+  <div class="hero-sep"></div>
+  <div class="hero-pills">
+    <div class="hero-pill"><div class="pill-led teal"></div><span>PAST</span></div>
+    <div class="hero-pill"><div class="pill-led orange"></div><span>PRESENT</span></div>
+    <div class="hero-pill"><div class="pill-led blue"></div><span>FUTURE</span></div>
+  </div>
+  <div class="scroll-cue"><span>SCROLL</span><div class="scroll-chevron"></div></div>
+</section>
+
+<!-- ═══════════════ PAST ═══════════════ -->
+<div id="past">
+  <!-- Section banner with photo -->
+  <div class="sec-banner">
+    <div class="sec-banner-img" style="background-image:url('https://images.unsplash.com/photo-1552674605-db6ffd4facb5?auto=format&fit=crop&w=1800&q=80')"></div>
+    <div class="sec-banner-overlay"></div>
+    <div class="sec-banner-grid"></div>
+    <div class="sec-banner-content">
+      <div class="sec-eyebrow past-eye">/* 01 — PAST · Where it all started */</div>
+      <h2 class="sec-h2">The Foundation</h2>
+      <p class="sec-sub">// Early experiences that shaped everything</p>
+    </div>
+  </div>
+
+  <section class="sec sec-past">
+    <div class="grid grid-auto" data-card-grid>
+
+      <div class="card card-teal">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🌴</span>
+          <div class="card-t">Beach</div>
+          <p class="card-p">I go to the beach with my family. It relaxes me and helps me think of new ideas.</p>
+        </div>
+      </div>
+
+      <div class="card card-teal">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">⚽</span>
+          <div class="card-t">Sports Complex</div>
+          <p class="card-p">I practice many sports and I love the environment of training and competition.</p>
+        </div>
+      </div>
+
+      <div class="card card-teal">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1511895426328-dc8714191011?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">👨‍👩‍👦</span>
+          <div class="card-t">Parents</div>
+          <p class="card-p">My parents support me and send me to sports and training camps.</p>
+        </div>
+      </div>
+
+      <div class="card card-teal">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🎓</span>
+          <div class="card-t">Teachers</div>
+          <p class="card-p">My teachers help me improve my knowledge and believe in me.</p>
+        </div>
+      </div>
+
+      <div class="card card-teal grid-full">
+        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">❤️</span>
+          <div class="card-t">Girlfriend</div>
+          <p class="card-p">She has been a very important part of my life. She supports me, motivates me and is with me in every step of the way. We grow together and dream together.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="quote-wrap quote-teal" data-reveal="quote">
+      <p class="quote-inner">Sports taught me discipline, teamwork and consistency. These values built the foundation of who I am today.</p>
+      <p class="quote-attr">past.compile() · status: foundation_built ✓</p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ PRESENT ═══════════════ -->
+<div class="s-div"></div>
+<div id="present">
+  <!-- Section banner with photo -->
+  <div class="sec-banner">
+    <div class="sec-banner-img" style="background-image:url('https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?auto=format&fit=crop&w=1800&q=80')"></div>
+    <div class="sec-banner-overlay"></div>
+    <div class="sec-banner-grid"></div>
+    <div class="sec-banner-content">
+      <div class="sec-eyebrow present-eye">/* 02 — PRESENT · Where I am now */</div>
+      <h2 class="sec-h2">The Build Phase</h2>
+      <p class="sec-sub">// Modules currently running in production</p>
+    </div>
+  </div>
+
+  <section class="sec sec-present">
+    <div class="grid grid-auto" data-card-grid>
+
+      <div class="card card-orange">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">💻</span>
+          <div class="card-t">Programming</div>
+          <p class="card-p">I started learning programming and discovered my passion for building things.</p>
+        </div>
+      </div>
+
+      <div class="card card-orange">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🤖</span>
+          <div class="card-t">AI Agency</div>
+          <p class="card-p">I created my AI Agency to help people and companies with intelligent solutions.</p>
+          <div class="badge badge-orange">BugAI</div>
+        </div>
+      </div>
+
+      <div class="card card-orange">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">📚</span>
+          <div class="card-t">Learning Everyday</div>
+          <p class="card-p">I keep improving my skills in programming, AI and business.</p>
+        </div>
+      </div>
+
+      <div class="card card-orange">
+        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🤝</span>
+          <div class="card-t">New People &amp; Projects</div>
+          <p class="card-p">I meet new people, create connections and work on exciting projects.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="quote-wrap quote-orange" data-reveal="quote">
+      <p class="quote-inner">I'm building my future today with discipline, curiosity and passion.</p>
+      <p class="quote-attr">present.status() · threads: running</p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ FUTURE ═══════════════ -->
+<div class="s-div"></div>
+<div id="future">
+  <!-- Section banner with photo -->
+  <div class="sec-banner">
+    <div class="sec-banner-img" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1800&q=80')"></div>
+    <div class="sec-banner-overlay"></div>
+    <div class="sec-banner-grid"></div>
+    <div class="sec-banner-content">
+      <div class="sec-eyebrow future-eye">/* 03 — FUTURE · Where I'm going */</div>
+      <h2 class="sec-h2 future-h2">The Roadmap</h2>
+      <p class="sec-sub">// Objectives queued for execution</p>
+    </div>
+  </div>
+
+  <section class="sec sec-future">
+    <div class="grid grid-future" data-card-grid>
+
+      <div class="card card-blue">
+        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1488085061387-422e29b40080?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🌍</span>
+          <div class="card-t">Travel the World</div>
+          <p class="card-p">I want to travel, discover new cultures, gain experiences and open my mind to new ideas. Including the possibility of living in Spain 🇪🇸 and experiencing a completely new lifestyle.</p>
+        </div>
+      </div>
+
+      <div class="card card-blue">
+        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1539037116277-4db20889f2d4?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🇪🇸</span>
+          <div class="card-t">Live in Spain</div>
+          <p class="card-p">Living in Spain — discovering a new culture, a different lifestyle, and expanding my perspective of the world.</p>
+        </div>
+      </div>
+
+      <div class="card card-blue">
+        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🚀</span>
+          <div class="card-t">Grow My AI Agency</div>
+          <p class="card-p">I want to take my agency to the next level and help more people and companies around the world.</p>
+          <div class="badge badge-blue">BugAI ↗</div>
+        </div>
+      </div>
+
+      <div class="card card-blue">
+        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="card-body">
+          <span class="card-icon">🏢</span>
+          <div class="card-t">Work for Big Tech</div>
+          <p class="card-p">I want to have the chance to work for a big tech company and be at the center of global innovation.</p>
+        </div>
+      </div>
+
+      <div class="card card-blue">
+        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80&sat=-30')"></div>
+        <div class="card-body">
+          <span class="card-icon">⭐</span>
+          <div class="card-t">Make an Impact</div>
+          <p class="card-p">I want to build technology that makes a real difference in people's lives at a global scale.</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="quote-wrap quote-blue" data-reveal="quote">
+      <p class="quote-inner">Big dreams. Clear plans. Endless possibilities.</p>
+      <p class="quote-attr">future.pipe() · status: pending_execution</p>
+    </div>
+  </section>
+</div>
+
+<!-- ═══════════════ JOURNEY ═══════════════ -->
+<div class="s-div"></div>
+<section id="journey">
+  <div class="journey-bg"></div>
+  <div class="journey-overlay"></div>
+  <div class="journey-inner">
+    <div class="journey-title">THE JOURNEY THAT CONNECTS IT ALL</div>
+    <div class="journey-track">
+      <div class="journey-step"><div class="step-node">⚽</div><div class="step-lbl">Sports</div><div class="step-sub">Passion &<br>Discipline</div></div>
+      <div class="journey-conn"><div class="conn-line"></div></div>
+      <div class="journey-step"><div class="step-node">💪</div><div class="step-lbl">Discipline</div><div class="step-sub">Consistency<br>& Effort</div></div>
+      <div class="journey-conn"><div class="conn-line"></div></div>
+      <div class="journey-step"><div class="step-node">📖</div><div class="step-lbl">Learning</div><div class="step-sub">Knowledge<br>& Growth</div></div>
+      <div class="journey-conn"><div class="conn-line"></div></div>
+      <div class="journey-step"><div class="step-node">💻</div><div class="step-lbl">Programming</div><div class="step-sub">Problem<br>Solving</div></div>
+      <div class="journey-conn"><div class="conn-line"></div></div>
+      <div class="journey-step"><div class="step-node">🤖</div><div class="step-lbl">AI</div><div class="step-sub">Innovation</div></div>
+      <div class="journey-conn"><div class="conn-line"></div></div>
+      <div class="journey-step"><div class="step-node">🏗️</div><div class="step-lbl">Entrepreneur</div><div class="step-sub">Building<br>& Creating</div></div>
+      <div class="journey-conn"><div class="conn-line"></div></div>
+      <div class="journey-step"><div class="step-node">🌐</div><div class="step-lbl">Global Impact</div><div class="step-sub">Inspiring<br>the Future</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<div class="s-div"></div>
+<footer id="footer">
+  <div class="footer-card" data-reveal="footer">
+    <p class="footer-qt">I'm not just planning my future,<br>I'm building it.<br>Step by step, every day.</p>
+    <p class="footer-sub">status: BUILDING...</p>
+  </div>
+  <div class="footer-bar">
+    <div class="footer-logo">BugAI //</div>
+    <div class="footer-meta">life.timeline.v1.0.0 · compiled 2026</div>
+    <div class="footer-status">ACTIVE</div>
+  </div>
+</footer>
+
+<!-- ═══════════════ LIGHTBOX ═══════════════ -->
+<div id="lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+
+  <!-- Top bar: mini timeline + controls -->
+  <div class="lb-topbar">
+    <div class="lb-timeline" id="lb-timeline"></div>
+    <div class="lb-top-right">
+      <span class="lb-counter" id="lb-counter">1 / 13</span>
+      <button class="lb-close" id="lb-close" title="Cerrar (Esc)">✕</button>
+    </div>
+  </div>
+
+  <!-- Main: prev arrow | photo+body | next arrow -->
+  <div class="lb-main">
+    <button class="lb-arrow lb-prev" id="lb-prev" title="Anterior (←)">←</button>
+
+    <div class="lb-card" id="lb-card">
+      <div class="lb-photo" id="lb-photo"></div>
+      <div class="lb-body">
+        <div class="lb-sec-tag" id="lb-sec-tag"></div>
+        <span class="lb-icon" id="lb-icon"></span>
+        <div class="lb-title" id="lb-title"></div>
+        <div class="lb-text" id="lb-text"></div>
+        <div id="lb-badge-wrap"></div>
+      </div>
+    </div>
+
+    <button class="lb-arrow lb-next" id="lb-next" title="Siguiente (→)">→</button>
+  </div>
+
+  <!-- Bottom hint -->
+  <div class="lb-hint">← → NAVEGAR &nbsp;·&nbsp; ESC CERRAR &nbsp;·&nbsp; CLICK FUERA PARA SALIR</div>
+</div>
+
+<script>
+/* TERMINAL LOADER */
+const termBody=document.getElementById('termBody'),loaderBar=document.getElementById('loaderBar'),loader=document.getElementById('loader');
+const lines=[
+  {html:'<span class="t-cmt">// life-timeline v1.0.0</span>'},
+  {html:'<span class="t-kw">import</span> { past, present, future } <span class="t-kw">from</span> <span class="t-str">"./life"</span>'},
+  {html:''},
+  {html:'<span class="t-cmt">→ Loading past experiences...</span>',prog:20},
+  {html:'<span class="t-ok">  ✓</span> foundation.compiled',prog:38},
+  {html:'<span class="t-cmt">→ Initializing present modules...</span>',prog:55},
+  {html:'<span class="t-ok">  ✓</span> BugAI.agency.deployed',prog:70},
+  {html:'<span class="t-cmt">→ Queueing future objectives...</span>',prog:85},
+  {html:'<span class="t-ok">  ✓</span> roadmap.compiled',prog:95},
+  {html:''},
+  {html:'<span class="t-ok">// READY TO LAUNCH 🚀</span>',prog:100},
+];
+let li=0;
+const addLine=()=>{
+  if(li>=lines.length){setTimeout(()=>{loader.classList.add('hidden');document.body.style.overflow=''},500);return}
+  const l=lines[li++];
+  const el=document.createElement('div');el.className='t-line';el.innerHTML=l.html||'&nbsp;';
+  termBody.querySelectorAll('.t-cursor').forEach(c=>c.remove());
+  const cur=document.createElement('span');cur.className='t-cursor';el.appendChild(cur);
+  termBody.appendChild(el);termBody.scrollTop=termBody.scrollHeight;
+  if(l.prog)loaderBar.style.width=l.prog+'%';
+  setTimeout(addLine,li<4?120:200);
+};
+document.body.style.overflow='hidden';
+setTimeout(addLine,300);
+
+/* PARTICLES */
+const cvs=document.getElementById('particleCanvas'),ctx=cvs.getContext('2d');
+let W,H;
+function resize(){W=cvs.width=window.innerWidth;H=cvs.height=window.innerHeight}
+resize();window.addEventListener('resize',resize);
+const P=[];const N=60;
+class Dot{constructor(){this.reset(true)}reset(init){this.x=Math.random()*W;this.y=Math.random()*H;this.vx=(Math.random()-.5)*.18;this.vy=(Math.random()-.5)*.18;this.r=Math.random()*1.2+.4;this.life=init?Math.random()*300:0;this.maxLife=280+Math.random()*220}update(){this.x+=this.vx;this.y+=this.vy;this.life++;if(this.life>this.maxLife||this.x<-10||this.x>W+10||this.y<-10||this.y>H+10)this.reset(false)}draw(){const p=this.life/this.maxLife;const a=(p<.15?p/.15:p>.85?(1-p)/.15:1)*.45;ctx.globalAlpha=a;ctx.fillStyle='#60a5fa';ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fill();ctx.globalAlpha=1}}
+for(let i=0;i<N;i++)P.push(new Dot());
+(function loop(){ctx.clearRect(0,0,W,H);for(let i=0;i<N;i++){P[i].update();P[i].draw();for(let j=i+1;j<N;j++){const dx=P[i].x-P[j].x,dy=P[i].y-P[j].y;const d=Math.sqrt(dx*dx+dy*dy);if(d<100){ctx.strokeStyle=`rgba(96,165,250,${(1-d/100)*.08})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.stroke()}}}requestAnimationFrame(loop)})();
+
+/* SCROLL PROGRESS */
+const progressBar=document.getElementById('readProgress');
+window.addEventListener('scroll',()=>{const total=document.body.scrollHeight-window.innerHeight;progressBar.style.width=(window.scrollY/total*100)+'%'},{passive:true});
+
+/* INTERSECTION OBSERVER */
+function makeObs(cb,opts){return new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)cb(e.target)})},{threshold:.12,rootMargin:'0px 0px -40px 0px',...opts})}
+
+/* CARD GRIDS — staggered reveal */
+document.querySelectorAll('[data-card-grid]').forEach(grid=>{
+  const cards=grid.querySelectorAll('.card');
+  const obs=makeObs(target=>{
+    cards.forEach((c,i)=>setTimeout(()=>c.classList.add('in'),i*100));
+    obs.unobserve(target);
+  });
+  obs.observe(grid);
+});
+
+/* QUOTES */
+document.querySelectorAll('[data-reveal="quote"]').forEach(el=>{
+  const obs=makeObs(target=>{target.classList.add('in');obs.unobserve(target)});
+  obs.observe(el);
+});
+
+/* JOURNEY */
+const jTrack=document.querySelector('.journey-track');
+if(jTrack){const jObs=makeObs(target=>{document.querySelectorAll('.journey-step').forEach((s,i)=>setTimeout(()=>s.classList.add('in'),i*90));jObs.unobserve(target)});jObs.observe(jTrack)}
+
+/* FOOTER */
+const fCard=document.querySelector('.footer-card');
+if(fCard){const fObs=makeObs(target=>{target.classList.add('in');fObs.unobserve(target)},{threshold:.3});fObs.observe(fCard)}
+
+/* SIDE NAV */
+const navItems=document.querySelectorAll('.snav-item');
+const secIds=['hero','past','present','future','journey'];
+const secEls=secIds.map(id=>document.getElementById(id));
+function updateNav(){
+  const mid=window.scrollY+window.innerHeight*.4;
+  let active=0;
+  secEls.forEach((el,i)=>{if(el&&el.offsetTop<=mid)active=i});
+  navItems.forEach((item,i)=>item.classList.toggle('active',i===active));
+}
+window.addEventListener('scroll',updateNav,{passive:true});
+updateNav();
+navItems.forEach(item=>item.addEventListener('click',()=>{
+  const el=document.getElementById(item.dataset.target);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+}));
+
+/* ═══════════════════════════════
+   LIGHTBOX SYSTEM
+═══════════════════════════════ */
+const cardData=[];
+
+// Section colors and names
+function getSecInfo(card){
+  if(card.closest('.sec-future'))return{name:'FUTURE',color:'#60a5fa',secClass:'future'};
+  if(card.closest('.sec-present'))return{name:'PRESENT',color:'#fb923c',secClass:'present'};
+  return{name:'PAST',color:'#2dd4bf',secClass:'past'};
+}
+
+// Collect all cards in DOM order
+document.querySelectorAll('.sec-past .card, .sec-present .card, .sec-future .card').forEach(card=>{
+  const info=getSecInfo(card);
+  const photo=card.querySelector('.card-photo');
+  let photoUrl='';
+  if(photo){
+    const bg=photo.style.backgroundImage;
+    const m=bg.match(/url\(['"]?(.*?)['"]?\)/);
+    if(m)photoUrl=m[1];
+  }
+  const idx=cardData.length;
+  cardData.push({
+    photoUrl,
+    icon:card.querySelector('.card-icon')?.textContent||'',
+    title:card.querySelector('.card-t')?.textContent||'',
+    text:card.querySelector('.card-p')?.textContent||'',
+    badge:card.querySelector('.badge')?.textContent||'',
+    ...info
+  });
+  card.addEventListener('click',()=>openLightbox(idx));
+});
+
+// Build section groups for mini timeline
+const secGroups=[];
+let curGroup=null;
+cardData.forEach((c,i)=>{
+  if(!curGroup||curGroup.name!==c.name){
+    curGroup={name:c.name,color:c.color,indices:[]};
+    secGroups.push(curGroup);
+  }
+  curGroup.indices.push(i);
+});
+
+// Lightbox elements
+const lb=document.getElementById('lightbox');
+const lbTimeline=document.getElementById('lb-timeline');
+const lbCounter=document.getElementById('lb-counter');
+const lbCard=document.getElementById('lb-card');
+const lbPhoto=document.getElementById('lb-photo');
+const lbSecTag=document.getElementById('lb-sec-tag');
+const lbIcon=document.getElementById('lb-icon');
+const lbTitle=document.getElementById('lb-title');
+const lbText=document.getElementById('lb-text');
+const lbBadgeWrap=document.getElementById('lb-badge-wrap');
+const lbPrev=document.getElementById('lb-prev');
+const lbNext=document.getElementById('lb-next');
+
+// Build mini timeline HTML
+(function buildTimeline(){
+  let html='';
+  secGroups.forEach((g,gi)=>{
+    html+=`<div class="lb-tl-section">
+      <div class="lb-tl-sec-label" data-sec="${g.name}" style="color:${g.color}">${g.name}</div>
+      <div class="lb-tl-dots">
+        ${g.indices.map(i=>`<div class="lb-tl-dot" data-idx="${i}" style="border-color:${g.color};color:${g.color}" title="${cardData[i].title}" onclick="navigateTo(${i},'jump')"></div>`).join('')}
+      </div>
+    </div>`;
+    if(gi<secGroups.length-1)html+=`<div class="lb-tl-connector"></div>`;
+  });
+  lbTimeline.innerHTML=html;
+})();
+
+function updateTimeline(idx){
+  document.querySelectorAll('.lb-tl-dot').forEach(dot=>{
+    const di=parseInt(dot.dataset.idx);
+    const isAct=di===idx;
+    dot.classList.toggle('active',isAct);
+  });
+  // Highlight active section label
+  const curSec=cardData[idx]?.name;
+  document.querySelectorAll('.lb-tl-sec-label').forEach(lbl=>{
+    lbl.classList.toggle('tl-active',lbl.dataset.sec===curSec);
+  });
+}
+
+function fillCard(idx){
+  const d=cardData[idx];
+  lbPhoto.style.backgroundImage=`url('${d.photoUrl}')`;
+  lbSecTag.textContent=d.name;
+  lbSecTag.style.color=d.color;
+  lbIcon.textContent=d.icon;
+  lbTitle.textContent=d.title;
+  lbTitle.style.color=d.color;
+  lbText.textContent=d.text;
+  if(d.badge){
+    lbBadgeWrap.innerHTML=`<span class="lb-badge-el" style="color:${d.color};border-color:${d.color}40;background:${d.color}12">${d.badge}</span>`;
+  }else{
+    lbBadgeWrap.innerHTML='';
+  }
+  lbCounter.textContent=`${idx+1} / ${cardData.length}`;
+  lbPrev.disabled=idx===0;
+  lbNext.disabled=idx===cardData.length-1;
+  updateTimeline(idx);
+}
+
+let currentIdx=0;
+let animating=false;
+
+function openLightbox(idx){
+  currentIdx=idx;
+  fillCard(idx);
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+function closeLightbox(){
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+}
+
+window.navigateTo=function(newIdx,dir){
+  if(animating)return;
+  if(newIdx<0||newIdx>=cardData.length)return;
+  animating=true;
+  const outClass=dir==='prev'?'slide-out-r':'slide-out-l';
+  const inClass=dir==='prev'?'slide-in-r':'slide-in-l';
+  lbCard.classList.add(outClass);
+  setTimeout(()=>{
+    fillCard(newIdx);
+    currentIdx=newIdx;
+    lbCard.classList.remove(outClass);
+    lbCard.classList.add(inClass);
+    setTimeout(()=>{lbCard.classList.remove(inClass);animating=false;},380);
+  },260);
+};
+
+document.getElementById('lb-close').addEventListener('click',closeLightbox);
+lbPrev.addEventListener('click',()=>navigateTo(currentIdx-1,'prev'));
+lbNext.addEventListener('click',()=>navigateTo(currentIdx+1,'next'));
+lb.addEventListener('click',e=>{if(e.target===lb)closeLightbox()});
+document.addEventListener('keydown',e=>{
+  if(!lb.classList.contains('open'))return;
+  if(e.key==='ArrowRight')navigateTo(currentIdx+1,'next');
+  else if(e.key==='ArrowLeft')navigateTo(currentIdx-1,'prev');
+  else if(e.key==='Escape')closeLightbox();
+});
+
+/* DEV CONSOLE */
+console.log('%c MY LIFE TIMELINE · BugAI ','background:#050c1a;color:#60a5fa;font-family:monospace;font-size:14px;padding:12px 24px;border:1px solid #60a5fa');
+</script>
+</body>
+</html>
