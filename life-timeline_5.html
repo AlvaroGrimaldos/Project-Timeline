@@ -184,9 +184,24 @@ a{text-decoration:none;color:inherit}
 .hero-from-to .accent-teal{color:var(--teal);font-weight:700}
 .hero-from-to .accent-orange{color:var(--orange);font-weight:700}
 .hero-tagline{margin-top:14px;font-family:var(--mono);font-size:14px;color:var(--teal);letter-spacing:2px;opacity:0;animation:riseUp .7s 1s forwards}
-.hero-sep{margin:44px auto;width:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:expandW .8s 1.3s forwards}
+.hero-desc{
+  max-width:620px;margin:24px auto 0;font-family:var(--sans);font-size:clamp(15px,1.8vw,18px);
+  color:var(--text2);line-height:1.8;font-weight:400;opacity:0;animation:riseUp .7s 1.15s forwards;
+}
+.hero-stats{display:flex;gap:48px;margin-top:32px;opacity:0;animation:riseUp .7s 1.3s forwards}
+.hero-stat{text-align:center}
+.hero-stat-num{font-family:var(--sans);font-size:clamp(28px,3.5vw,40px);font-weight:900;color:var(--text);line-height:1;letter-spacing:-1px}
+.hero-stat-label{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+.hero-sep{margin:44px auto;width:0;height:1px;background:linear-gradient(90deg,transparent,var(--blue),transparent);animation:expandW .8s 1.5s forwards}
 @keyframes expandW{to{width:280px}}
-.hero-pills{display:flex;gap:48px;opacity:0;animation:riseUp .7s 1.5s forwards}
+.hero-pills{display:flex;gap:48px;opacity:0;animation:riseUp .7s 1.7s forwards}
+.hero-cta{margin-top:36px;opacity:0;animation:riseUp .7s 1.9s forwards}
+.hero-cta a{
+  display:inline-flex;align-items:center;gap:10px;padding:14px 36px;
+  font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  color:var(--bg);background:var(--blue);transition:all .3s;
+}
+.hero-cta a:hover{background:var(--text);transform:translateY(-2px);box-shadow:0 8px 30px rgba(96,165,250,.3)}
 .hero-pill{display:flex;align-items:center;gap:10px;font-family:var(--sans);font-size:11px;font-weight:700;color:var(--text2);letter-spacing:3px}
 .pill-led{width:8px;height:8px;border-radius:50%;animation:ledPulse 2s infinite}
 .pill-led.teal{background:var(--teal);box-shadow:0 0 8px var(--teal)}
@@ -520,7 +535,7 @@ a{text-decoration:none;color:inherit}
 
 /* Cards are clickable */
 .card{cursor:pointer}
-</style>
+
 @keyframes riseUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
@@ -613,6 +628,7 @@ a{text-decoration:none;color:inherit}
     <div class="hero-pill"><div class="pill-led orange"></div><span>PRESENT</span></div>
     <div class="hero-pill"><div class="pill-led blue"></div><span>FUTURE</span></div>
   </div>
+  <div class="hero-cta"><a href="https://bugai.online" target="_blank" rel="noopener noreferrer">Visit BugAI ⟶</a></div>
   <div class="scroll-cue"><span>SCROLL</span><div class="scroll-chevron"></div></div>
 </section>
 
@@ -634,7 +650,7 @@ a{text-decoration:none;color:inherit}
     <div class="grid grid-auto" data-card-grid>
 
       <div class="card card-teal">
-        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-photo" style="background-image:url('BEACH.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">🌴</span>
           <div class="card-t">Beach</div>
@@ -643,7 +659,7 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <div class="card card-teal">
-        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-photo" style="background-image:url('SPORT_COMPLEX.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">⚽</span>
           <div class="card-t">Sports Complex</div>
@@ -652,7 +668,7 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <div class="card card-teal">
-        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1511895426328-dc8714191011?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-photo" style="background-image:url('PARENTS.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">👨‍👩‍👦</span>
           <div class="card-t">Parents</div>
@@ -670,7 +686,7 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <div class="card card-teal grid-full">
-        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="card-photo card-photo-lg" style="background-image:url('GIRLFRIEND.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">❤️</span>
           <div class="card-t">Girlfriend</div>
@@ -706,7 +722,7 @@ a{text-decoration:none;color:inherit}
     <div class="grid grid-auto" data-card-grid>
 
       <div class="card card-orange">
-        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-photo" style="background-image:url('PROGRAMMING.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">💻</span>
           <div class="card-t">Programming</div>
@@ -715,12 +731,12 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <div class="card card-orange">
-        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1677442135703-1787eea5ce01?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-photo" style="background-image:url('AI_AGENCY.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">🤖</span>
           <div class="card-t">AI Agency</div>
           <p class="card-p">I created my AI Agency to help people and companies with intelligent solutions.</p>
-          <div class="badge badge-orange">BugAI</div>
+          <a href="https://bugai.online" target="_blank" rel="noopener noreferrer" class="badge badge-orange">BugAI</a>
         </div>
       </div>
 
@@ -734,7 +750,7 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <div class="card card-orange">
-        <div class="card-photo" style="background-image:url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80')"></div>
+        <div class="card-photo" style="background-image:url('NEW_PEOPLE.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">🤝</span>
           <div class="card-t">New People &amp; Projects</div>
@@ -788,12 +804,12 @@ a{text-decoration:none;color:inherit}
       </div>
 
       <div class="card card-blue">
-        <div class="card-photo card-photo-lg" style="background-image:url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?auto=format&fit=crop&w=1200&q=80')"></div>
+        <div class="card-photo card-photo-lg" style="background-image:url('GROW_MY_AI_AGENCY.jpeg')"></div>
         <div class="card-body">
           <span class="card-icon">🚀</span>
           <div class="card-t">Grow My AI Agency</div>
           <p class="card-p">I want to take my agency to the next level and help more people and companies around the world.</p>
-          <div class="badge badge-blue">BugAI ↗</div>
+          <a href="https://bugai.online" target="_blank" rel="noopener noreferrer" class="badge badge-blue">BugAI ↗</a>
         </div>
       </div>
 
